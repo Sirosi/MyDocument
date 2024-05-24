@@ -1,6 +1,8 @@
 # 이력
 - 2024年05月23日(木) - 최초작성
-- 2024年05月24日(金) - 권장 Command구조 변경
+- 2024年05月24日(金)
+    1. 권장 Command구조 변경
+    2. 데이터 바인딩 예제 추가, 대본 파일명 추가
 
 
 
@@ -9,7 +11,7 @@
 > ※ .NET8기준으로 서술됨.\
 > ※ 해당 문서는 MVVM패턴을 기준으로 서술하려고 노력함.
 
-MS 사에서 개발한 Window에 최적화 된 Application GUI.
+MS 사에서 개발한 Window에 최적화 된 Application GUI 개발 툴.
 
 WinForm과는 비슷한 영역에서 활동하나 장단점은 상당히 상이함.
 
@@ -200,6 +202,35 @@ Window와 Page 내에서 Button등의 요소를 만들거나, 그룹화할 때 �
     - **(번외)** 그 외에도 다른 방법으로도 연결할 수 있지만, 생략하겠다.
 
 4. **데이터 바인딩**
+    
+    **.xaml.cs**
+    ``` csharp
+    public class ViewModel: INotifyPropertyChanged
+    {
+        private IList<TestModel> _proto;
+        public IList<TestModel> Proto
+        {
+            get => _proto;
+            set => SetProperty(ref _proto, value);
+        }
+
+        // 이하 생략
+    }
+
+    public class TestModel
+    {
+        private string _text;
+        public string Text
+        {
+            get => _text;
+            set => SetProperty(ref _text, value);
+        }
+
+        // 이하 생략
+    }
+    ```
+
+    **.xaml**
     ``` xml
     <Grid>
         <Label Content="{Binding Proto[0].Text, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}"/>
@@ -356,7 +387,11 @@ Window와 Page 내에서 Button등의 요소를 만들거나, 그룹화할 때 �
 
 3. **대본 작성**
 
+    **main.resx**
+
     ![img](./localization_2.png)
+
+    **main.ko-KR.resx**
 
     ![img](./localization_3.png)
 
