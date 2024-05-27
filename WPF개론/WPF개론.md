@@ -3,6 +3,7 @@
 - 2024年05月24日(金)
     1. 권장 Command구조 변경
     2. 데이터 바인딩 예제 추가, 대본 파일명 추가
+- 2024年05月27日(月) - 오타 수정
 
 
 
@@ -305,8 +306,8 @@ Window와 Page 내에서 Button등의 요소를 만들거나, 그룹화할 때 �
 
 6. **권장 커맨드 구조**
 
-    **RelayCommand.cs**
     ``` csharp
+    // RelayCommand.cs
     public class RelayCommand(Action<object?> executeMethod, Predicate<object?>? canExecute = null): ICommand
     {
         public event EventHandler? CanExecuteChanged;
@@ -321,21 +322,20 @@ Window와 Page 내에서 Button등의 요소를 만들거나, 그룹화할 때 �
             executeMethod(parameter);
         }
     }
-    ```
-    **TestViewModel.xaml.cs**
-    ``` csharp
+    
+    // TestViewModel.xaml.cs
     public partial class TestViewModel
     {
         private ICommand? _testCommand;
         public ICommand TestCommand
         {
-            get => _testCommand ??= new RayCommand(TestMethod);
+            get => _testCommand ??= new RelayCommand(TestMethod);
         }
 
         private ICommand? _test2Command;
         public ICommand Test2Command
         {
-            get => _test2Command ??= new RayCommand(Test2Method, IsCan);
+            get => _test2Command ??= new RelayCommand(Test2Method, IsCan);
         }
 
         private void TestMethod(object? parameter)
