@@ -162,5 +162,8 @@ UserControl을 사용하여, CustomControl을 만드는 간소한 과정을 서�
 
 이미지 버튼을 만드는 과정으로 서술하겠음.
 
-1. **UserControl 생성**
+1. **파일생성**
 
+    ![img](./uc_0.png)
+
+    먼저 상기 이미지처럼 **UserControls** 폴더에 **TestUserControl.xaml**을 생성.
