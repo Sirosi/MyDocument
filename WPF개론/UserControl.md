@@ -18,7 +18,7 @@ UserControl(이하 UC)은 WPF 및 WinForm등에서 지원하는 말그대로, Us
 
 
 
-# UserControl Paging
+# Paging
 
 UserControl을 MDI구조로 작성하기위해 사용하는 방법에 대한 서술.
 
@@ -156,7 +156,7 @@ UserControl을 MDI구조로 작성하기위해 사용하는 방법에 대한 서
 
 
 
-# UserControl CustomControl
+# CustomControl
 
 UserControl을 사용하여, CustomControl을 만드는 간소한 과정을 서술.
 
@@ -164,6 +164,73 @@ UserControl을 사용하여, CustomControl을 만드는 간소한 과정을 서�
 
 1. **파일생성**
 
-    ![img](./uc_0.png)
+    ![img](./uc_2.png)
 
-    먼저 상기 이미지처럼 **UserControls** 폴더에 **TestUserControl.xaml**을 생성.
+    먼저 상기 이미지처럼 **UserControls** 폴더에 **TestControl.xaml**을 생성.
+
+    파라메터를 적용하는 단순한 예제를 위해서, 단순히 Label 1개가 들어가는 UserControl을 만들 거다.
+
+    **※ UserControl은 다른 객체들과는 달리 View/Model/ViewModel 등을 이름에 붙이지 않고, UI의 이름만을  간결하게 적는 것을 권장.**\
+    **ex) ImageButton, TextProgressBar**
+
+2. **UserControl, 코드 비하인드 수정**
+
+    **TestControl.xaml.cs**
+    ``` csharp
+    [Category("커스텀"), Description("텍스트")]
+    public string Text
+    {
+        get => _text;
+        set => _text = value;
+    }
+    private string _text;
+    ```
+
+    위 코드를 **TestControl.xaml.cs**에 추가한다.
+
+    이제 TestControl에는 **Text**라는 Parameter가 추가된 거다.
+
+    - **[]:** 대괄호에 들어간 코드는 UserControl의 Parameter를 GUI 상에서 표현하는 부분.\
+        ![img](./uc_3.png)
+        - **Category:** GUI Parameter의 그룹명.
+        - **Description:** Parameter 설명.
+
+3. **View xaml 수정**
+
+    **TextControl.xaml**
+    ``` xml
+    <!--x:Name="root"-->
+    <Grid>
+        <Label Content="{Binding Text, ElementName=root}"/>
+    </Grid>
+    ```
+
+    상단의 주석은 UserControl의 Window의 속성으로 추가한다.
+
+    이제 UserControl의 Text Parameter를 수정하면, 내부의 Label의 Content값이 바뀐다.
+
+    하지만, 현재 상황에서는 **TestControl's Parameter <-> ViewModel's Property**의 정상적인 Binding 처리를 하지 못한다.
+
+
+
+4. **의존 프로퍼티 추가**
+
+    **TestControl.xaml.cs**
+    ``` csharp
+    [Category("커스텀"), Description("텍스트")]
+    public string Text
+    {
+        get => (string)GetValue(_sourceProperty);
+        set => SetValue(_sourceProperty, value);
+    }
+    private static readonly DependencyProperty _sourceProperty =
+        DependencyProperty.Register("Text", typeof(string), typeof(TestControl));
+    ```
+
+    UserControl이 외부의 Property와 정상적인 Binding을 할 수 있게 수정했다.
+
+    - **GetValue, SetValue:** 의존 프로퍼티에서 값을 **조회/변경**할 때 사용되는 Method.
+    - **DependencyProperty:** 의존 프로퍼티로 Property 값이 변경됐을 때, 자동으로 처리하게 할 수 있게 해주는 것이다.
+        - **"Text":** Binding 등에 사용할 Property명을 넣어야 한다.
+        - **typeof(string):** Property의 Type이다.
+        - **typeof(TestControl):** 해당 의존 프로퍼티를 사용할 클래스명이다.
