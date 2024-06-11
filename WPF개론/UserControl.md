@@ -1,6 +1,8 @@
 # 이력
 
 - 2024年05月31日(金) - 최초작성
+- 2024年06月10日(月) - CustomControl 추가
+- 2024年06月11日(火) - CustomControl, 기본값 추가
 
 
 # UserControl 시작
@@ -224,7 +226,7 @@ UserControl을 사용하여, CustomControl을 만드는 간소한 과정을 서�
         set => SetValue(_sourceProperty, value);
     }
     private static readonly DependencyProperty _sourceProperty =
-        DependencyProperty.Register("Text", typeof(string), typeof(TestControl));
+        DependencyProperty.Register("Text", typeof(string), typeof(TestControl), new PropertyMetadata("기본값"));
     ```
 
     UserControl이 외부의 Property와 정상적인 Binding을 할 수 있게 수정했다.
@@ -234,3 +236,4 @@ UserControl을 사용하여, CustomControl을 만드는 간소한 과정을 서�
         - **"Text":** Binding 등에 사용할 Property명을 넣어야 한다.
         - **typeof(string):** Property의 Type이다.
         - **typeof(TestControl):** 해당 의존 프로퍼티를 사용할 클래스명이다.
+        - **"기본값":** 이 부분은 Property의 기본값을 넣는다.
